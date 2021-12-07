@@ -11,15 +11,14 @@ def get_min_fuel(calc_rule):
 		ifuel = 0
 		for p in positions:
 			ifuel += calc_rule(i, p)
-		if min_fuel > ifuel:
-			min_fuel = ifuel
+		min_fuel = min(ifuel, min_fuel)
 	return min_fuel
 
 def part1():
 	return get_min_fuel(lambda x, y: abs(x - y))
 
 def part2():
-	return get_min_fuel(lambda x, y: (abs(x - y) + 1)**2 // 2 - (abs(x - y) + 1) // 2)
+	return get_min_fuel(lambda x, y: abs(x - y)*(abs(x - y) + 1) // 2)
 
 print(part1())
 print(part2())
