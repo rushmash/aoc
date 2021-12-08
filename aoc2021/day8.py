@@ -10,7 +10,7 @@ with open('in8.txt', 'r') as f:
 		digits.append(d.strip().split())
 
 def part1():
-	return len(list(filter(lambda x: len(x) == 2 or len(x) == 3 or len(x) == 4 or len(x) == 7, chain(*digits))))
+	return len(list(filter(lambda x: len(x) in [2, 3, 4, 7], chain(*digits))))
 
 def decode_signal(signal) -> list:
 	decoded = [{} for _ in range(10)]
@@ -36,8 +36,13 @@ def decode_signal(signal) -> list:
 
 			case 5: # either 5,2,3
 
+				# decode 2
+				if decoded[5] and decoded[3]:
+					decoded[2] = code
+					digit = 2
+
 				# decode 5
-				if decoded[3] and decoded[2]:
+				elif decoded[6] and code.issubset(decoded[6]):
 					decoded[5] = code
 					digit = 5
 
@@ -46,19 +51,14 @@ def decode_signal(signal) -> list:
 					decoded[3] = code
 					digit = 3
 
-				# decode 2
-				elif decoded[4] and decoded[6]:
-					diff = decoded[6] - decoded[4]
-					if diff.issubset(code):
-						decoded[2] = code
-						digit = 2
-
 			case 6: # either 9,6,0
 
+				# decode 0
+				if decoded[9] and decoded[6]:
+					decoded[0] = code
+					digit = 0
+
 				# decode 9
-				if decoded[3] and decoded[3].issubset(code):
-					decoded[9] = code
-					digit = 9
 				elif decoded[4] and decoded[4].issubset(code):
 					decoded[9] = code
 					digit = 9
@@ -67,12 +67,6 @@ def decode_signal(signal) -> list:
 				elif decoded[1] and not decoded[1].issubset(code):
 					decoded[6] = code
 					digit = 6
-
-				# decode 0
-				elif decoded[9]:
-					if decoded[6] or decoded[1] and decoded[1].issubset(code):
-						decoded[0] = code
-						digit = 0
 
 		if digit < 0:
 			signal.append(signal_digit)
