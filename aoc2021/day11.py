@@ -11,16 +11,13 @@ def model(oct_grid, max_iterations, find_sync=False) -> int:
 
     for it in range(1, max_iterations+1):
         to_flash = set()
-        flashed = set()
         for m in range(M):
             for n in range(N):
-                if (m, n) in flashed:
-                    continue
-
                 oct_grid[m][n] += 1
                 if oct_grid[m][n] > 9:
                     to_flash.add((m,n))
 
+        flashed = set()
         while to_flash:
             m, n = to_flash.pop()
             flashed.add((m,n))
