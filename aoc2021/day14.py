@@ -18,26 +18,19 @@ def calculate(it):
 		to_add = Counter()
 		for old, (new1, new2) in rules.items():
 			count = polymer[old]
-			to_add[new1] += polymer[old]
-			to_add[new2] += polymer[old]
+			to_add[new1] += count
+			to_add[new2] += count
 			del polymer[old]
-		
+
 		for (a, b), count in to_add.items():
 			polymer[(a, b)] += count
 
 	letters = Counter()
-	for (a, b), count in polymer.items():
-		letters[a] += count
-		letters[b] += count
+	letters[template[-1]] += 1
+	for (a, _), c in polymer.items():
+		letters[a] += c
 
-	letters2 = Counter()
-	for a, c in letters.items():
-		if a in [template[0], template[-1]] and template[0] != template[-1]:
-			letters2[a] = (c + 1) // 2
-		else:
-			letters2[a] = c // 2
-
-	mc = letters2.most_common()
+	mc = letters.most_common()
 	print(mc[0][-1] - mc[-1][-1])
 
 def part1():
