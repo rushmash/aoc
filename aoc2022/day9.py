@@ -4,14 +4,7 @@ input = open('in9.txt', 'r').read().splitlines()
 
 def touching(p1, p2):
     x1, y1, x2, y2 = (*p1, *p2)
-    if x1 == x2 and y1 == y2:
-        return True
-    elif x1 == x2:
-        return abs(y1 - y2) == 1
-    elif y1 == y2:
-        return abs(x1 - x2) == 1
-
-    return abs(x1 - x2) == 1 and abs(y1 - y2) == 1
+    return abs(x1 - x2) <= 1 and abs(y1 - y2) <= 1
 
 def move(p, x, y):
     for _ in range(abs(x)):
@@ -39,8 +32,7 @@ def follow(p1, p2):
         return p
     return p2
         
-head = (0, 0)
-knots = [(0, 0) for _ in range(9)]
+rope = [(0, 0) for _ in range(10)]
 positions1 = set()
 positions2 = set()
 
@@ -55,13 +47,13 @@ for motion in input:
         case 'D', step:
             dx, dy = 0, int(step)
 
-    for head in move(head, dx, dy):
-        prev = head
-        for i in range(len(knots)):
-            prev = knots[i] = follow(prev, knots[i])
+    for head in move(rope[0], dx, dy):
+        rope[0] = head
+        for i in range(1, len(rope)):
+            rope[i] = follow(rope[i-1], rope[i])
 
-        positions1.add(knots[0])
-        positions2.add(knots[-1])
+        positions1.add(rope[1])
+        positions2.add(rope[-1])
 
 print(len(positions1))
 print(len(positions2))
